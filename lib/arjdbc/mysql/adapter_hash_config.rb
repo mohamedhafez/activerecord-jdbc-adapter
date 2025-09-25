@@ -3,8 +3,6 @@
 module ArJdbc
   module MysqlConfig
     def build_connection_config(config)
-      config = config.deep_dup
-
       load_jdbc_driver
 
       # don't set driver if it's explicitly set to false
@@ -61,7 +59,7 @@ module ArJdbc
 
       properties["connectionCollation"] ||= config[:collation] if config[:collation]
 
-      properties["autoReconnect"] ||= reconnect.to_s unless config[:reconnect].nil?
+      properties["autoReconnect"] ||= reconnect.to_s if config[:reconnect]
 
       properties["noDatetimeStringSync"] = true unless properties.key?("noDatetimeStringSync")
 

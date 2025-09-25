@@ -72,7 +72,8 @@ module ActiveRecord
         @config[:flags] ||= 0
 
         # assign arjdbc extra connection params
-        conn_params = build_connection_config(@config.compact)
+        @connection_parameters = @config.compact.deep_dup
+        build_connection_config(@connection_parameters)
 
         # JDBC mysql appears to use found rows by default: https://dev.mysql.com/doc/connector-j/en/connector-j-connp-props-connection.html
         # if @config[:flags].kind_of? Array
@@ -80,8 +81,6 @@ module ActiveRecord
         # else
         #   @config[:flags] |= ::Mysql2::Client::FOUND_ROWS
         # end
-
-        @connection_parameters = conn_params
       end
 
       def supports_json?
